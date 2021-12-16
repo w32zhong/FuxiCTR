@@ -111,7 +111,7 @@ class Tokenizer(object):
         for word in pretrained_vocab.keys():
             embedding_matrix[self.vocab[word]] = pretrained_emb[pretrained_vocab[word]]
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with h5py.File(output_path, 'a') as hf:
+        with h5py.File(output_path, 'w') as hf:
             hf.create_dataset(feature_name, data=embedding_matrix)
 
     def load_vocab_from_file(self, vocab_file):
