@@ -4,7 +4,7 @@ Base:
     verbose: 1
     patience: 2
     pickle_feature_encoder: True
-    use_hdf5: True
+    use_hdf5: False
     save_best_only: True
     every_x_epochs: 1
     debug: False
