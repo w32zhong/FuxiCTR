@@ -439,6 +439,22 @@ LR_test:
     monitor: 'AUC'
     monitor_mode: 'max'
 
+MathClicks_test:
+    model: LR
+    dataset_id: mathclicks
+    loss: binary_crossentropy
+    metrics: ['logloss', 'AUC']
+    task: binary_classification
+    optimizer: adam
+    learning_rate: 1.0e-3
+    regularizer: 1.e-8
+    batch_size: 128
+    epochs: 1
+    shuffle: True
+    seed: 2019
+    monitor: 'AUC'
+    monitor_mode: 'max'
+
 NFM_test:
     model: NFM
     dataset_id: taobao_tiny
