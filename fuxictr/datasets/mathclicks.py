@@ -22,31 +22,14 @@ from ..features import FeatureEncoder as BaseFeatureEncoder
 from datetime import datetime, date
 
 class FeatureEncoder(BaseFeatureEncoder):
-    def extract_country_code(self, df, col_name):
-        return df[col_name].apply(lambda isrc: isrc[0:2] if not pd.isnull(isrc) else "")
-
-    def bucketize_age(self, df, col_name):
-        def _bucketize(age):
-            if pd.isnull(age):
-                return ""
+    def qualify_shorthand_numbers(self, df, col_name):
+        tens = dict(k=1e3, m=1e6, b=1e9)
+        def _qualify_shorthand_numbers(x):
+            x = x.replace(',', '')
+            if not x[-1].isdigit():
+                y = int(int(x[:-1]) * tens[x[-1].lower()])
             else:
-                age = float(age)
-                if age < 1 or age > 95:
-                    return ""
-                elif age <= 10:
-                    return "1"
-                elif age <=20:
-                    return "2"
-                elif age <=30:
-                    return "3"
-                elif age <=40:
-                    return "4"
-                elif age <=50:
-                    return "5"
-                elif age <=60:
-                    return "6"
-                else:
-                    return "7"
-        return df[col_name].apply(_bucketize)
-
-
+                y = int(x)
+            return y
+        nums = df[col_name].apply(_qualify_shorthand_numbers)
+        return nums
