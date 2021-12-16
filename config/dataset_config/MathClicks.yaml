@@ -1,0 +1,14 @@
+mathclicks:
+    data_root: ../data/mathclicks/
+    data_format: csv
+    train_data: ../data/mathclicks/train.csv
+    valid_data: ../data/mathclicks/train.csv
+    test_data:  ../data/mathclicks/train.csv
+    min_categr_count: 1
+    feature_cols:
+        - {name: ["psg_type_c","psg_type_a","psg_type_q"], active: True, dtype: str, type: categorical}
+        - {name: ["rank","impression","sum_psg_votes","hl_num","f_len_diff"], active: True, dtype: int, type: categorical, encoder: numeric_bucket}
+        - {name: ["obs_ctr", "a0_sym","a0_stct","a0_score","text_sim"], active: True, dtype: float, type: numeric, normalizer: StandardScaler}
+        - {name: post_viewed, active: True, dtype: str, type: categorical, preprocess: qualify_shorthand_numbers, encoder: numeric_bucket}
+        #- {name: ["q_emb","d_emb","qf_emb","df_emb","q_tag_emb","d_tag_emb"], active: False, dtype: str, type: categorical}
+    label_col: {name: click, dtype: float}
