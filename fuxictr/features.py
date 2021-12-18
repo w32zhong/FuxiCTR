@@ -126,7 +126,7 @@ class FeatureEncoder(object):
         all_cols = self.feature_cols + [self.label_col]
         dtype_dict = dict((x["name"], eval(x["dtype"]) if isinstance(x["dtype"], str) else x["dtype"]) 
                           for x in all_cols)
-        ddf = pd.read_csv(data_path, dtype=dtype_dict, memory_map=True)
+        ddf = pd.read_csv(data_path, dtype=dtype_dict, memory_map=True, skipinitialspace=True)
         return ddf
 
     def preprocess(self, ddf, fill_na=True):
