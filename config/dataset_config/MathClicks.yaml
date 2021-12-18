@@ -7,7 +7,7 @@ mathclicks:
     min_categr_count: 1
     feature_cols:
         - {name: ["psg_type_c","psg_type_a","psg_type_q"], active: True, dtype: str, type: categorical}
-        - {name: ["rank","impression","sum_psg_votes","hl_num","f_len_diff"], active: True, dtype: int, type: categorical, encoder: numeric_bucket}
+        - {name: ["rank","impression","sum_psg_votes","hl_num","f_len_q","f_len_d"], active: True, dtype: int, type: categorical, encoder: numeric_bucket}
         - {name: ["obs_ctr", "a0_sym","a0_stct","a0_score","text_sim"], active: True, dtype: float, type: numeric, normalizer: StandardScaler}
         - {name: post_viewed, active: True, dtype: str, type: categorical, preprocess: qualify_shorthand_numbers, encoder: numeric_bucket}
         - {name: ["deep_p_sim","deep_f_sim","deep_tag_sim"], active: True, dtype: float, type: numeric, normalizer: StandardScaler}
