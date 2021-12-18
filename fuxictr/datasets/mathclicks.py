@@ -27,7 +27,7 @@ class FeatureEncoder(BaseFeatureEncoder):
         def _qualify_shorthand_numbers(x):
             x = x.strip()
             if len(x) == 0:
-                return ''
+                return 0
             x = x.replace(',', '')
             if not x[-1].isdigit():
                 y = int(int(x[:-1]) * tens[x[-1].lower()])
