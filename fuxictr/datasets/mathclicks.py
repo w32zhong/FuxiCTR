@@ -25,6 +25,9 @@ class FeatureEncoder(BaseFeatureEncoder):
     def qualify_shorthand_numbers(self, df, col_name):
         tens = dict(k=1e3, m=1e6, b=1e9)
         def _qualify_shorthand_numbers(x):
+            x = x.strip()
+            if len(x) == 0:
+                return ''
             x = x.replace(',', '')
             if not x[-1].isdigit():
                 y = int(int(x[:-1]) * tens[x[-1].lower()])
