@@ -44,6 +44,7 @@ def load_config(config_dir, experiment_id):
     # with experiment_id settings
     params.update(found_params.get('Base', {}))
     params.update(found_params.get(experiment_id))
+    params['dataset_id'] = 'mathclicks'
     if 'dataset_id' not in params:
         raise RuntimeError('experiment_id={} is not valid in config.'.format(experiment_id))
     params['model_id'] = experiment_id
