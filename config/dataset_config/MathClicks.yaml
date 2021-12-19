@@ -2,8 +2,8 @@ mathclicks:
     data_root: ../data/mathclicks/
     data_format: csv
     train_data: ../data/mathclicks/train.csv
-    valid_data: ../data/mathclicks/train.csv
-    test_data:  ../data/mathclicks/train.csv
+    valid_data: ../data/mathclicks/valid.csv
+    test_data:  ../data/mathclicks/test.csv
     min_categr_count: 1
     feature_cols:
         - {name: ["psg_type_c","psg_type_a","psg_type_q"], active: True, dtype: str, type: categorical}
