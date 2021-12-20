@@ -85,16 +85,20 @@ def enumerate_params(config_file, exclude_expid=[]):
         base_config_dir = config_dict.get("base_config", os.path.dirname(config_file))
         model_dict = load_model_config(base_config_dir, experiment_id)
 
-    dataset_id = config_dict.get("dataset_id", model_dict["dataset_id"])
-    if "dataset_config" in config_dict:
-        dataset_dict = config_dict["dataset_config"][dataset_id]
+
+    #dataset_id = config_dict.get("dataset_id", model_dict["dataset_id"])
+    dataset_id = 'mathclicks'
+    #if "dataset_config" in config_dict:
+    #    dataset_dict = config_dict["dataset_config"][dataset_id]
+    if False:
+        pass
     else:
         dataset_dict = load_dataset_config(base_config_dir, dataset_id)
-        
-    if model_dict["dataset_id"] == "TBD": # rename base expid
-        model_dict["dataset_id"] = dataset_id
-        experiment_id = model_dict["model"] + "_" + dataset_id
-        
+
+    #if model_dict["dataset_id"] == "TBD": # rename base expid
+    #    model_dict["dataset_id"] = dataset_id
+    #    experiment_id = model_dict["model"] + "_" + dataset_id
+  
     # key checking
     tuner_keys = set(tune_dict.keys())
     base_keys = set(model_dict.keys()).union(set(dataset_dict.keys()))
@@ -128,7 +132,7 @@ def enumerate_params(config_file, exclude_expid=[]):
     model_param_combs = dict()
     for idx, values in enumerate(itertools.product(*map(model_dict.get, model_para_keys))):
         model_param_combs[idx + 1] = dict(zip(model_para_keys, values))
-        
+
     # update dataset_id into model params
     merged_param_combs = dict()
     for idx, item in enumerate(itertools.product(model_param_combs.values(),
@@ -148,6 +152,7 @@ def enumerate_params(config_file, exclude_expid=[]):
     with open(model_config, "w") as fw:
         yaml.dump(merged_param_combs, fw, default_flow_style=None, indent=4)
     print("Enumerate all tuner configurations done.")    
+
     return config_dir
 
 def load_experiment_ids(config_dir):
@@ -169,6 +174,7 @@ def grid_search(version, config_dir, gpu_list, expid_tag=None):
     gpu_list = list(gpu_list)
     idle_queue = list(range(len(gpu_list)))
     processes = dict()
+    
     while len(experiment_id_list) > 0:
         if len(idle_queue) > 0:
             idle_idx = idle_queue.pop(0)
@@ -176,8 +182,11 @@ def grid_search(version, config_dir, gpu_list, expid_tag=None):
             expid = experiment_id_list.pop(0)
             cmd = "python -u run_expid.py --version {} --config {} --expid {} --gpu {}"\
                   .format(version, config_dir, expid, gpu_id)
-            # print("Run cmd:", cmd)
+
+            print("Run cmd:", cmd)
+            quit()
             p = subprocess.Popen(cmd.split())
+            
             processes[idle_idx] = p
         else:
             time.sleep(5)
