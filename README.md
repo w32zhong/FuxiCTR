@@ -11,3 +11,8 @@ Run all experiment:
 ```
 python run_all.sh
 ```
+
+Run parameter grid search (download [the BARS repo](https://github.com/openbenchmark/BARS/tree/master/ctr_prediction/benchmarks) ahead of time):
+```
+python run_param_tuner.py --config ../../BARS/ctr_prediction/benchmarks/WideDeep/WideDeep_avazu_x4_001/WideDeep_avazu_x4_tuner_config_01.yaml
+```
