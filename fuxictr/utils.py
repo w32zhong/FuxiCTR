@@ -44,7 +44,11 @@ def load_config(config_dir, experiment_id):
     # with experiment_id settings
     params.update(found_params.get('Base', {}))
     params.update(found_params.get(experiment_id))
-    params['dataset_id'] = 'mathclicks'
+
+    if not params['dataset_id'].startswith('mathclicks'):
+        params['dataset_id'] = 'mathclicks'
+    print(params['dataset_id'])
+
     #params['epochs'] = 1 # for TEST
     if 'dataset_id' not in params:
         raise RuntimeError('experiment_id={} is not valid in config.'.format(experiment_id))

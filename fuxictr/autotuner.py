@@ -184,7 +184,7 @@ def grid_search(version, config_dir, gpu_list, expid_tag=None):
                   .format(version, config_dir, expid, gpu_id)
 
             print("Run cmd:", cmd)
-            quit()
+            #quit()
             p = subprocess.Popen(cmd.split())
             
             processes[idle_idx] = p
