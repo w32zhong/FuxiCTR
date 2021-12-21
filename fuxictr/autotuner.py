@@ -78,7 +78,7 @@ def enumerate_params(config_file, exclude_expid=[]):
     if "base_expid" in config_dict:
         experiment_id = config_dict["base_expid"]
     else:
-        return None
+        raise Exception('no base_expid')
     if "model_config" in config_dict:
         model_dict = dict()
         if 'Base' in config_dict["model_config"]:
@@ -154,7 +154,7 @@ def enumerate_params(config_file, exclude_expid=[]):
     model_config = os.path.join(config_dir, "model_config.yaml")
     with open(model_config, "w") as fw:
         yaml.dump(merged_param_combs, fw, default_flow_style=None, indent=4)
-    print("Enumerate all tuner configurations done.")    
+    #print("Enumerate all tuner configurations done.")    
 
     return config_dir
 
@@ -177,24 +177,26 @@ def grid_search(version, config_dir, gpu_list, expid_tag=None):
     gpu_list = list(gpu_list)
     idle_queue = list(range(len(gpu_list)))
     processes = dict()
-    
-    while len(experiment_id_list) > 0:
-        if len(idle_queue) > 0:
-            idle_idx = idle_queue.pop(0)
-            gpu_id = gpu_list[idle_idx]
-            expid = experiment_id_list.pop(0)
-            cmd = "python -u run_expid.py --version {} --config {} --expid {} --gpu {}"\
-                  .format(version, config_dir, expid, gpu_id)
 
-            print("Run cmd:", cmd)
-            #quit()
-            p = subprocess.Popen(cmd.split())
-            
-            processes[idle_idx] = p
-        else:
-            time.sleep(5)
-            for idle_idx, p in processes.items():
-                if p.poll() is not None: # terminated
-                    idle_queue.append(idle_idx)
-    [p.wait() for p in processes.values()]
+    for expid in experiment_id_list:
+        cmd = "python -u run_expid.py --version {} --config {} --expid {}".format(version, config_dir, expid)
+        print(cmd)
+    
+#    while len(experiment_id_list) > 0:
+#        if len(idle_queue) > 0:
+#            idle_idx = idle_queue.pop(0)
+#            gpu_id = gpu_list[idle_idx]
+#            expid = experiment_id_list.pop(0)
+#            cmd = "python -u run_expid.py --version {} --config {} --expid {} --gpu {}"\
+#                  .format(version, config_dir, expid, gpu_id)
+#
+#            print(cmd)
+#            #p = subprocess.Popen(cmd.split())
+#            #processes[idle_idx] = p
+#        else:
+#            time.sleep(5)
+#            for idle_idx, p in processes.items():
+#                if p.poll() is not None: # terminated
+#                    idle_queue.append(idle_idx)
+#    [p.wait() for p in processes.values()]
 

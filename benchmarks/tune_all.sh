@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 for path in $(find ../../BARS/ctr_prediction/benchmarks/ -name '*.yaml' | grep _avazu_); do
     filename=$(basename $path)
     model_name=$(echo $path | cut -d / -f6)

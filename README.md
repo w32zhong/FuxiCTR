@@ -16,3 +16,9 @@ Run parameter grid search (download [the BARS repo](https://github.com/openbench
 ```
 python run_param_tuner.py --config ../../BARS/ctr_prediction/benchmarks/WideDeep/WideDeep_avazu_x4_001/WideDeep_avazu_x4_tuner_config_01.yaml
 ```
+
+Create a list of commands for parameter grid search, and run them:
+```
+./tune_all.sh > all_run.sh
+bash -x all_run.sh
+```
