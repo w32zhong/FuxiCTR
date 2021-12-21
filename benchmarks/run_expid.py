@@ -41,6 +41,11 @@ if __name__ == '__main__':
     
     args = vars(parser.parse_args())
     experiment_id = args['expid']
+
+    touch_id = 'touch/' + experiment_id
+    if os.path.exists(touch_id):
+        quit(0)
+
     params = load_config(args['config'], experiment_id)
     params['gpu'] = args['gpu']
     set_logger(params)
@@ -104,3 +109,6 @@ if __name__ == '__main__':
             .format(datetime.now().strftime('%Y%m%d-%H%M%S'), 
                     ' '.join(sys.argv), experiment_id, params['dataset_id'],
                     "N.A.", print_to_list(valid_result), print_to_list(test_result)))
+    
+    os.makedirs('touch/', exist_ok=True)
+    os.mknod(touch_id)

@@ -6,7 +6,7 @@ for path in $(find ../../BARS/ctr_prediction/benchmarks/ -name '*.yaml' | grep _
     if [[ $filename == model_config.yaml || $filename == dataset_config.yaml ]]; then
         continue
     fi
-    if [[ $model_name == HFM || $model_name == LorentzFM || $model_name == FLEN || $model_name == DIN || $model_name == FiGNN || $model_name == FFM ]]; then
+    if [[ $model_name == HFM || $model_name == LorentzFM || $model_name == FLEN || $model_name == DIN ]]; then
         continue
     fi
 

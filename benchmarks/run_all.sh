@@ -15,7 +15,7 @@ for path in $(find ../config/model_config -name '*.yaml'); do
     if [[ $model_name == $skip_until ]]; then
         skip=false
     fi
-    if [[ $model_name == HFM || $model_name == LorentzFM || $model_name == FLEN || $model_name == DIN || $model_name == FiGNN || $model_name == FFM ]]; then
+    if [[ $model_name == HFM || $model_name == LorentzFM || $model_name == FLEN || $model_name == DIN ]]; then
         continue
     fi
 
