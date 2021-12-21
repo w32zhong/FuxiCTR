@@ -20,5 +20,6 @@ python run_param_tuner.py --config ../../BARS/ctr_prediction/benchmarks/WideDeep
 Create a list of commands for parameter grid search, and run them:
 ```
 ./tune_all.sh > all_run.sh
+rm -rf touch
 ./run_all_run.sh
 ```
