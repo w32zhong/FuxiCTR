@@ -75,7 +75,10 @@ def enumerate_params(config_file, exclude_expid=[]):
     for k, v in tune_dict.items():
         if not isinstance(v, list):
             tune_dict[k] = [v]
-    experiment_id = config_dict["base_expid"]
+    if "base_expid" in config_dict:
+        experiment_id = config_dict["base_expid"]
+    else:
+        return None
     if "model_config" in config_dict:
         model_dict = dict()
         if 'Base' in config_dict["model_config"]:

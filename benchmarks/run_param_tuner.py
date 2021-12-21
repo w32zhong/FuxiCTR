@@ -35,5 +35,8 @@ if __name__ == '__main__':
 
     # generate parameter space combinations
     config_dir = autotuner.enumerate_params(args['config'])
+    if config_dir is None:
+        print('Not base base_expid, skip')
+        quit(0)
     autotuner.grid_search(version, config_dir, gpu_list, tag)
 
