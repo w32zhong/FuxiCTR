@@ -38,12 +38,13 @@ if __name__ == '__main__':
     parser.add_argument('--config', type=str, default='../config/', help='The config directory.')
     parser.add_argument('--expid', type=str, default='FM_test', help='The experiment id to run.')
     parser.add_argument('--gpu', type=int, default=-1, help='The gpu index, -1 for cpu')
+    parser.add_argument('--force', type=int, default=0, help='')
     
     args = vars(parser.parse_args())
     experiment_id = args['expid']
 
     touch_id = 'touch/' + experiment_id
-    if os.path.exists(touch_id):
+    if os.path.exists(touch_id) and not args['force']:
         quit(0)
 
     params = load_config(args['config'], experiment_id)
@@ -100,8 +101,9 @@ if __name__ == '__main__':
 
     # get evaluation results on test
     logging.info('******** Test evaluation ********')
+    params['shuffle'] = False
     test_gen = datasets.h5_generator(feature_map, stage='test', **params)
-    test_result = model.evaluate_generator(test_gen)
+    test_result = model.evaluate_generator(test_gen, do_mmr=params['data_root'])
     
     # save the results to csv
     with open(Path(args['config']).stem + '.csv', 'a+') as fw:
@@ -111,4 +113,5 @@ if __name__ == '__main__':
                     "N.A.", print_to_list(valid_result), print_to_list(test_result)))
     
     os.makedirs('touch/', exist_ok=True)
-    os.mknod(touch_id)
+    if not os.path.exists(touch_id):
+        os.mknod(touch_id)
