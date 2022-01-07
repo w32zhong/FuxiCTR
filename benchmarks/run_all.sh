@@ -1,6 +1,4 @@
 #!/bin/bash
-set -e
-
 for path in $(find ../config/model_config -name '*.yaml'); do
     filename=$(basename $path)
     if [[ $filename == tests.yaml || $filename == common.yaml ]]; then
