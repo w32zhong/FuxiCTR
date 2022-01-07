@@ -1,8 +1,1 @@
-click,rank,impression,obs_ctr,post_viewed,a0_sym,a0_stct,a0_score,title_sim,text_sim,sum_psg_votes,psg_type_c,psg_type_a,psg_type_q,hl_num,deep_p_sim,deep_f_sim,deep_tag_sim,f_len_q,f_len_d
-0, 4, 1, 0.0,    ,   ,   ,   ,  ,   ,   ,   ,   ,  , 1, 0.1, 0.2, 0.3, , 
-1, 5, 1, 0.0,    ,   ,   ,   ,  ,   ,   ,   ,   ,  , 1, 0.1, 0.2, 0.3, , 
-0, 6, 1, 0.0,    ,   ,   ,   ,  ,   ,   ,   ,   ,  , 1, 0.1, 0.2, 0.3, , 
-1, 7, 1, 0.0,    ,   ,   ,   ,  ,   ,   ,   ,   ,  , 2, 0.1, 0.2, 0.3, , 
-0, 7, 3, 0.3, 123k,0.2, 0.8, 3.2, 1.23, 1.7, 4, 0,0,1, 5, 0.1,0.2,0.3, 10,12
-1, 6, 2, 0.1, 30,  0.7, 0.5, 1.3, 1.23, 2.0, 5, 1,1,0, 6,  0.1,0.2,0.3, 20,14
-0, 1, 5, 0.9, 302, 0.9, 0.1, 2.3, 1.23, 3.0, 9, 1,0,1, 9,  0.1,0.2,0.3, 22,10
+/tuna1/scratch/w32zhong/math-click/math-click-repo/train.csv
