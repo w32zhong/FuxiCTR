@@ -9,7 +9,7 @@ for path in $(find ../config/model_config -name '*.yaml'); do
     model_name=$(echo $filename | cut -d . -f1)
     echo ${model_name}
 
-    if [[ $model_name == HFM || $model_name == LorentzFM || $model_name == FLEN || $model_name == DIN ]]; then
+    if [[ $model_name == HFM || $model_name == LorentzFM || $model_name == FLEN || $model_name == DIN || $model_name == HOFM ]]; then
         continue
     fi
 
