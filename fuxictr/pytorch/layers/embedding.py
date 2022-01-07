@@ -174,7 +174,7 @@ class EmbeddingDictLayer(nn.Module):
         return feature_emb_dict
 
     def show_a0_weights(self):
-        for key in ['a0_sym', 'a0_stct', 'a0_score']:
-            print(key, 'weight:', self.embedding_layer[key].weight.item())
+        for key in self.embedding_layer:
+            print(key, 'weight:', self.embedding_layer[key].weight.squeeze().tolist())
 
 
