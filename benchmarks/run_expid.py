@@ -93,6 +93,9 @@ if __name__ == '__main__':
     logging.info("Load best model: {}".format(model.checkpoint))
     model.load_weights(model.checkpoint)
 
+    if isinstance(model, getattr(models, 'LR')):
+        model.show_a0_weights()
+
     # get evaluation results on validation
     logging.info('****** Validation evaluation ******')
     valid_result = model.evaluate_generator(valid_gen)

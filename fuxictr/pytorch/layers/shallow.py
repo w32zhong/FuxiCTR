@@ -37,6 +37,10 @@ class LR_Layer(nn.Module):
             output = self.final_activation(output)
         return output
 
+    def show_a0_weights(self):
+        self.embedding_layer.embedding_layer.show_a0_weights()
+        print('Bias:', self.bias.item())
+
 
 class FM_Layer(nn.Module):
     def __init__(self, feature_map, final_activation=None, use_bias=True):

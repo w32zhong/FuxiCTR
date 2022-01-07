@@ -49,3 +49,5 @@ class LR(BaseModel):
         return_dict = {"y_pred": y_pred, "y_true": y}
         return return_dict
 
+    def show_a0_weights(self):
+        self.lr_layer.show_a0_weights()
