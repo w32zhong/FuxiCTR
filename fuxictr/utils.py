@@ -45,7 +45,7 @@ def load_config(config_dir, experiment_id):
     params.update(found_params.get('Base', {}))
     params.update(found_params.get(experiment_id))
 
-    params['metrics'] = ['logloss', 'AUC', 'MRR']
+    params['metrics'] = ['logloss', 'AUC', 'MRR', 'MAP', 'NDCG']
 
     if not params['dataset_id'].startswith('mathclicks'):
         params['dataset_id'] = 'mathclicks'
