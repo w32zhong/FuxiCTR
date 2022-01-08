@@ -55,7 +55,7 @@ def calc_map(df, col_name):
     return MAP
 
 
-def calc_ndcg(df, col_name, k):
+def calc_ndcg(df, col_name, k=None):
     #df = df[:10] ### DEBUG
     scores = df[col_name].to_numpy().reshape(1, -1)
     clicks = df['click'].to_numpy().reshape(1, -1)
@@ -91,6 +91,7 @@ def evaluate_metrics(y_true, y_pred, metrics, **kwargs):
                 result['NDCG@10'] = calc_ndcg(df, 'y_pred', 10)
                 result['NDCG@50'] = calc_ndcg(df, 'y_pred', 50)
                 result['NDCG@100'] = calc_ndcg(df, 'y_pred', 100)
+                result['NDCG@all'] = calc_ndcg(df, 'y_pred')
 
             elif metric == "MRR":
                 result[metric] = calc_mrr(df, 'y_pred')
