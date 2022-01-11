@@ -214,7 +214,7 @@ class BaseModel(nn.Module):
                 break
         return epoch_loss / self._batches_per_epoch
 
-    def evaluate_generator(self, data_generator, do_mmr=None):
+    def evaluate_generator(self, data_generator, csv_dir=None):
         self.eval()  # set to evaluation mode
         with torch.no_grad():
             y_pred = []
@@ -228,7 +228,7 @@ class BaseModel(nn.Module):
                 y_true.extend(batch_data[1].data.cpu().numpy().reshape(-1))
             y_pred = np.array(y_pred, np.float64)
             y_true = np.array(y_true, np.float64)
-            val_logs = self.evaluate_metrics(y_true, y_pred, self._validation_metrics, do_mmr=do_mmr)
+            val_logs = self.evaluate_metrics(y_true, y_pred, self._validation_metrics, csv_dir=csv_dir)
             return val_logs
 
     def predict_generator(self, data_generator):
