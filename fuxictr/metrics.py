@@ -35,46 +35,41 @@ def calc_mrr(df, col_name):
         x_df = x_df.sort_values(by=[col_name], ascending=False)
         x_df = x_df.reset_index(drop=True)
         if x_df['click'].sum() == 0:
-            return -1
+            return np.nan
         else:
             return x_df['click'].ne(0).idxmax() + 1
     mrr_df_group = df.groupby(['qid'])[['click', col_name]]
     mrr_df = mrr_df_group.apply(apply_func)
     ranks = mrr_df.to_numpy()
-    ranks = ranks[ranks != -1]
+    ranks = ranks[~np.isnan(ranks)]
     reciprocal_ranks = 1 / ranks
     meanRR = reciprocal_ranks.mean()
     return meanRR
 
 
 def calc_map(df, col_name):
-    #df = df[:10] ### DEBUG
     def apply_func(x_df):
         x_df = x_df.sort_values(by=[col_name], ascending=False)
-        x_df = x_df.reset_index(drop=True)
-        x_df['clicks_above'] = x_df['click'].cumsum()
-        x_df = x_df.eval('precision = clicks_above / (index + 1)')
-        if x_df['click'].sum() == 0:
-            MAP = -1
+        scores = x_df[col_name].to_numpy()
+        clicks = x_df['click'].to_numpy()
+        if clicks.sum() == 0:
+            AP = np.nan
         else:
-            MAP = x_df['precision'].sum() / len(x_df)
-        return MAP
-    df_group = df.groupby(['qid'])[['click', col_name]]
+            AP = metrics.average_precision_score(clicks, scores)
+        return AP
+    df_group = df.groupby(['qid'])[['rank', 'click', col_name]]
     df = df_group.apply(apply_func)
-    AP = df.to_numpy()
-    AP = AP[AP != -1]
-    MAP = AP.mean()
+    MAP = df.mean()
     return MAP
 
 
 def calc_ndcg(df, col_name):
-    #df = df[:10] ### DEBUG
     def apply_func(x_df):
         x_df = x_df.sort_values(by=[col_name], ascending=False)
         scores = x_df[col_name].to_numpy().reshape(1, -1)
         clicks = x_df['click'].to_numpy().reshape(1, -1)
-        if clicks.shape[-1] == 1:
-            NDCG = clicks[0][0]
+        if clicks.shape[-1] == 1 or clicks.sum() == 0:
+            NDCG = np.nan
         else:
             NDCG = metrics.ndcg_score(clicks, scores)
         return NDCG
