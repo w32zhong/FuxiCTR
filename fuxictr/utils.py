@@ -46,7 +46,7 @@ def load_config(config_dir, experiment_id, do_rerank=False):
     params.update(found_params.get(experiment_id))
 
     if do_rerank:
-        params['metrics'] = ['RERANK']
+        params['metrics'] = ['logloss', 'RERANK']
     else:
         params['metrics'] = ['logloss', 'AUC', 'MRR', 'MAP', 'NDCG']
 

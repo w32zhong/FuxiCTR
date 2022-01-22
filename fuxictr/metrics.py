@@ -93,12 +93,17 @@ def rerank(df, col_name):
 
 def evaluate_metrics(y_true, y_pred, metrics, **kwargs):
     result = dict()
+    if 'RERANK' in metrics and 'csv_dir' in kwargs and kwargs['csv_dir'] is not None:
+        normal_metrics = False
+    else:
+        normal_metrics = True
+
     for metric in metrics:
-        if metric in ['logloss', 'binary_crossentropy']:
+        if metric in ['logloss', 'binary_crossentropy'] and normal_metrics:
             result[metric] = log_loss(y_true, y_pred, eps=1e-7)
-        elif metric == 'AUC':
+        elif metric == 'AUC' and normal_metrics:
             result[metric] = roc_auc_score(y_true, y_pred)
-        elif metric == "ACC":
+        elif metric == "ACC" and normal_metrics:
             y_pred = np.argmax(y_pred, axis=1)
             result[metric] = accuracy_score(y_true, y_pred)
         else:
