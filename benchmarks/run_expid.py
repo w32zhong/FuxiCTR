@@ -110,7 +110,7 @@ if __name__ == '__main__':
     logging.info('******** Test evaluation ********')
     params['shuffle'] = False
     test_gen = datasets.h5_generator(feature_map, stage='test', **params)
-    test_result = model.evaluate_generator(test_gen, csv_dir=params['data_root'])
+    test_result = model.evaluate_generator(test_gen, csv_dir=params['data_root'], expid=experiment_id)
     
     # save the results to csv
     with open(Path(args['config']).stem + '.csv', 'a+') as fw:
