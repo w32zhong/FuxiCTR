@@ -39,6 +39,8 @@ if __name__ == '__main__':
     parser.add_argument('--expid', type=str, default='FM_test', help='The experiment id to run.')
     parser.add_argument('--gpu', type=int, default=-1, help='The gpu index, -1 for cpu')
     parser.add_argument('--force', type=int, default=0, help='')
+    parser.add_argument('--rerank', type=int, default=0, help='')
+    parser.add_argument('--epochs', type=int, default=0, help='')
     
     args = vars(parser.parse_args())
     experiment_id = args['expid']
@@ -47,7 +49,7 @@ if __name__ == '__main__':
     if os.path.exists(touch_id) and not args['force']:
         quit(0)
 
-    params = load_config(args['config'], experiment_id)
+    params = load_config(args['config'], experiment_id, do_rerank=args['rerank'])
     params['gpu'] = args['gpu']
     set_logger(params)
     logging.info(print_to_json(params))
@@ -87,6 +89,8 @@ if __name__ == '__main__':
     # print number of parameters used in model
     model.count_parameters()
     # fit the model
+    if args['epochs'] > 0:
+        params['epochs'] = args['epochs']
     model.fit_generator(train_gen, validation_data=valid_gen, **params)
 
     # load the best model checkpoint

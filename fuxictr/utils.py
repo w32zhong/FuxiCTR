@@ -23,7 +23,7 @@ import json
 from collections import OrderedDict
 
 
-def load_config(config_dir, experiment_id):
+def load_config(config_dir, experiment_id, do_rerank=False):
     params = dict()
     model_configs = glob.glob(os.path.join(config_dir, 'model_config.yaml'))
     if not model_configs:
@@ -45,7 +45,10 @@ def load_config(config_dir, experiment_id):
     params.update(found_params.get('Base', {}))
     params.update(found_params.get(experiment_id))
 
-    params['metrics'] = ['logloss', 'AUC', 'MRR', 'MAP', 'NDCG']
+    if do_rerank:
+        params['metrics'] = ['RERANK']
+    else:
+        params['metrics'] = ['logloss', 'AUC', 'MRR', 'MAP', 'NDCG']
 
     if not params['dataset_id'].startswith('mathclicks'):
         params['dataset_id'] = 'mathclicks'

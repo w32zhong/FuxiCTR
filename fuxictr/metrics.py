@@ -79,6 +79,18 @@ def calc_ndcg(df, col_name):
     return NDCG
 
 
+def rerank(df, col_name):
+    def apply_func(x_df):
+        x_df = x_df.sort_values(by=[col_name], ascending=False)
+        x_df.reset_index(drop=True, inplace=True)
+        x_df['rank'] = x_df.index
+        df['rank'] = df['rank'] + 1
+        return x_df
+    df_group = df[['qid', 'docid', 'y_pred']].groupby(['qid'], group_keys=False)
+    df = df_group.apply(apply_func)
+    return df
+
+
 def evaluate_metrics(y_true, y_pred, metrics, **kwargs):
     result = dict()
     for metric in metrics:
@@ -109,7 +121,15 @@ def evaluate_metrics(y_true, y_pred, metrics, **kwargs):
             elif metric == "MRR":
                 result[metric] = calc_mrr(df, 'y_pred')
 
-            elif metric == "HitRate":
-                pass
+            elif metric == "RERANK":
+                df = rerank(df, 'y_pred')
+                with open('rerank_output.txt', 'w') as fh:
+                    for index, row in df.iterrows():
+                        score = format(row['y_pred'], '.50f')
+                        out = [row['qid'], '_', row['docid'],
+                            row['rank'], score, 'FuxiCTR']
+                        out = map(str, out)
+                        print('\t'.join(out), file=fh)
+                        fh.flush()
     logging.info('[Metrics] ' + ' - '.join('{}: {:.6f}'.format(k, v) for k, v in result.items()))
     return result
