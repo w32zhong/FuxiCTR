@@ -55,6 +55,8 @@ if __name__ == '__main__':
     logging.info(print_to_json(params))
     seed_everything(seed=params['seed'])
 
+    params['num_workers'] = 1 # Fixed this bug: https://github.com/pytorch/pytorch/issues/33296
+
     # preporcess the dataset
     dataset = params['dataset_id'].split('_')[0].lower()
     data_dir = os.path.join(params['data_root'], params['dataset_id'])
