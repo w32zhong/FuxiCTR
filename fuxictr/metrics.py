@@ -129,6 +129,7 @@ def evaluate_metrics(y_true, y_pred, metrics, **kwargs):
             elif metric == "RERANK":
                 df = rerank(df, 'y_pred')
                 expid = kwargs['expid']
+                print('Writing RERANK output ...')
                 with open(f'rerank_output-{expid}.txt', 'w') as fh:
                     for index, row in df.iterrows():
                         score = format(row['y_pred'], '.50f')
