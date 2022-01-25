@@ -7,9 +7,9 @@ cat ../data/mathclicks/test.retrieval.csv | sort -R | head -n 100 > ../data/math
 head -n 1 ../data/mathclicks/test.retrieval.csv > ../data/mathclicks/test.csv
 while read line; do
 	for i in {1..100}; do
-		echo $line | awk -F, "{OFS=FS}{\$5 = $i; print}"
+		echo $line | awk -F, "{OFS=FS}{\$4 = $i; print}"
 	done >> ../data/mathclicks/test.csv
 done < ../data/mathclicks/test.sample.csv
 
 ### Last step...
-echo "Please activate the (commented) RERANK handler in fuxictr/metrics.py"
+echo "Now, please activate the (commented) RERANK handler in fuxictr/metrics.py"
