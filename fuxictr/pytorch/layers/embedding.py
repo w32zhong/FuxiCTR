@@ -171,6 +171,9 @@ class EmbeddingDictLayer(nn.Module):
                     else:
                         embedding_vec = seq_embed_matrix
                 feature_emb_dict[feature] = embedding_vec
+                #if embedding_vec.sum() > 100:
+                #    print(feature)
+                #    print(embedding_vec)
         return feature_emb_dict
 
     def show_a0_weights(self):

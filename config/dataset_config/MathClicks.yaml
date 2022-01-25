@@ -10,5 +10,5 @@ mathclicks:
         - {name: ["sum_psg_votes","hl_num","f_len_q","f_len_d"], active: True, dtype: float, type: categorical, encoder: numeric_bucket, na_value: 0}
         - {name: ["rank","a0_sym","a0_stct","a0_score","title_sim","text_sim"], active: True, dtype: float, type: numeric, normalizer: StandardScaler, na_value: 0}
         - {name: "post_viewed", active: True, dtype: str, type: categorical, preprocess: qualify_shorthand_numbers, encoder: numeric_bucket}
-        - {name: ["deep_p_sim","deep_f_sim","deep_tag_sim", "token_sim"], active: True, dtype: float, type: numeric, normalizer: StandardScaler, na_value: 0}
+        - {name: ["deep_f_sim","deep_tag_sim", "token_sim"], active: True, dtype: float, type: numeric, normalizer: StandardScaler, na_value: 0}
     label_col: {name: click, dtype: float}
