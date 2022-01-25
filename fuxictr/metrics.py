@@ -138,5 +138,11 @@ def evaluate_metrics(y_true, y_pred, metrics, **kwargs):
                         out = map(str, out)
                         print('\t'.join(out), file=fh)
                         fh.flush()
+
+            #elif metric == "RERANK":
+            #    df = df[['qid', 'docid', 'rank', 'y_pred']]
+            #    expid = kwargs['expid']
+            #    df.to_csv(f'rank_marginal-{expid}.txt')
+
     logging.info('[Metrics] ' + ' - '.join('{}: {:.6f}'.format(k, v) for k, v in result.items()))
     return result
