@@ -84,7 +84,7 @@ def rerank(df, col_name):
         x_df = x_df.sort_values(by=[col_name], ascending=False)
         x_df.reset_index(drop=True, inplace=True)
         x_df['rank'] = x_df.index
-        df['rank'] = df['rank'] + 1
+        x_df['rank'] = x_df['rank'] + 1
         return x_df
     df_group = df[['qid', 'docid', 'y_pred']].groupby(['qid'], group_keys=False)
     df = df_group.apply(apply_func)
