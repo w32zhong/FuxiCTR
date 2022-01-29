@@ -45,6 +45,7 @@ def plot_all_under_dir(root_dir, title=None):
     plt.legend()
     plt.show()
 
+
 if __name__ == "__main__":
     os.environ["PAGER"] = 'cat'
     fire.Fire({
