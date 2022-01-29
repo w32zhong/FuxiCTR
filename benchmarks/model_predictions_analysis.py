@@ -3,7 +3,9 @@ import re
 import glob
 import fire
 import pickle
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.feature_selection import mutual_info_regression
 
 fields = 'a0_sym,a0_stct,a0_score,token_sim,deep_f_sim,deep_tag_sim,f_len_q,f_len_d'
@@ -39,9 +41,40 @@ def get_all_mut_info(root_dir):
         pickle.dump(results, fh)
 
 
+def plot_models(pkl_file='all_mut_info.pkl'):
+    with open(pkl_file, 'rb') as fh:
+        all_mut_info = pickle.load(fh)
+
+    fields, mi_dict = all_mut_info
+
+    under_performs = 'FFM,FmFM,CCPM,FiBiNET,DeepFM,FM'.split(',')
+    over_performs = 'FFMv2,DCNv2,FwFM,WideDeep,FiGNN,ONNv2,PNN,AutoInt,DCN,FNN,DeepCrossing,InterHAt,DNN,DeepIM'.split(',')
+
+    fig, axs = plt.subplots(2)
+    #fig.subplots_adjust(hspace=0.75)
+
+    for model in mi_dict:
+        mi = mi_dict[model]
+        mi = np.exp(mi) / np.sum(np.exp(mi))
+        if model in under_performs:
+            axs[0].plot(mi, label=model)
+        elif model in over_performs:
+            axs[1].plot(mi, label=model)
+        else:
+            print('skip neutral model:', model)
+            continue
+
+    fields = ['NULL'] + fields
+    axs[1].set_xticklabels(fields, rotation=70)
+    axs[0].legend(loc='upper right')
+    axs[1].legend(loc='upper right')
+    plt.show()
+
+
 if __name__ == "__main__":
     os.environ["PAGER"] = 'cat'
     fire.Fire({
         "mut_info_analysis": mut_info_analysis,
-        "get_all_mut_info": get_all_mut_info
+        "get_all_mut_info": get_all_mut_info,
+        "plot_models": plot_models
     })
