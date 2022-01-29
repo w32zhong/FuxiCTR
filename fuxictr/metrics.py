@@ -127,9 +127,12 @@ def evaluate_metrics(y_true, y_pred, metrics, **kwargs):
                 result[metric] = calc_mrr(df, 'y_pred')
 
             elif metric == "RERANK":
-                df = rerank(df, 'y_pred')
                 expid = kwargs['expid']
-                print(df)
+
+                print('Writing model predictions ...')
+                df.to_csv(f'model_predictions-{expid}.csv', index=False)
+
+                df = rerank(df, 'y_pred')
                 print('Writing RERANK output ...')
                 with open(f'rerank_output-{expid}.txt', 'w') as fh:
                     for index, row in df.iterrows():
