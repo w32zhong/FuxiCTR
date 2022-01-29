@@ -55,7 +55,7 @@ def plot_models(pkl_file='all_mut_info.pkl'):
 
     for model in mi_dict:
         mi = mi_dict[model]
-        mi = np.exp(mi) / np.sum(np.exp(mi))
+        assert len(mi) == len(fields)
         if model in under_performs:
             axs[0].plot(mi, label=model)
         elif model in over_performs:
