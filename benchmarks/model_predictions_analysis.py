@@ -5,12 +5,19 @@ import fire
 import pickle
 import numpy as np
 import pandas as pd
+import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KDTree
 from scipy.special import digamma
 
+import warnings
+warnings.filterwarnings('error')
+
 fields = 'a0_sym,a0_stct,a0_score,token_sim,deep_f_sim,deep_tag_sim,f_len_q,f_len_d'
 fields = fields.split(',')
+
+field_priority = 'deep_f_sim,deep_tag_sim,token_sim,a0_score,a0_sym,a0_stct,f_len_q,f_len_d'
+field_priority = field_priority.split(',')
 
 # Reference: https://github.com/gregversteeg/NPEET/blob/master/npeet/entropy_estimators.py
 
@@ -43,8 +50,12 @@ def entropy(x, k=3, base=2):
     x = add_noise(x)
     tree = build_tree(x)
     nn = query_neighbors(tree, x, k)
-    const = digamma(n_elements) - digamma(k) + n_features * np.log(2)
-    return (const + n_features * np.log(nn).mean()) / np.log(base)
+    try:
+        const = digamma(n_elements) - digamma(k) + n_features * np.log(2)
+        H = (const + n_features * np.log(nn).mean()) / np.log(base)
+    except Warning:
+        return -999
+    return H
 
 
 def cond_entropy(X, Y):
@@ -74,6 +85,7 @@ def mut_info_analysis(csv_file, n_rows=40_000, top_k_feat=3):
     Y = df['y_pred'].to_numpy().reshape(-1, 1)
     Z_set = []
     feat_set = fields.copy()
+    results = list()
     for k in range(top_k_feat):
         field_cmi = []
         for field in feat_set:
@@ -86,7 +98,9 @@ def mut_info_analysis(csv_file, n_rows=40_000, top_k_feat=3):
         del feat_set[max_field_idx]
         max_cmi = max(field_cmi)
         print(f'top-{k} max field:', max_field, '=', max_cmi)
+        results.append((max_field, max_cmi))
         Z_set.append(df[max_field].to_numpy())
+    return results
 
 
 def get_all_mut_info(root_dir):
@@ -105,33 +119,61 @@ def get_all_mut_info(root_dir):
         pickle.dump(results, fh)
 
 
-def plot_models(pkl_file='all_mut_info.pkl'):
+def plot_subgraph(ax, mi_dict, filter_set):
+    selected_models = list()
+    x_labels = set()
+    for model in mi_dict:
+        important_feats = mi_dict[model]
+        Y = [cmi for feat, cmi in important_feats]
+        if model not in filter_set:
+            continue
+        elif max(Y) > 500:
+            continue
+        selected_models.append(model)
+        feats = [feat for feat, cmi in important_feats]
+        x_labels = x_labels.union(set(feats))
+    x_labels = list(x_labels)
+    x_labels = sorted(x_labels, key=lambda x: field_priority.index(x))
+
+    for model in selected_models:
+        important_feats = mi_dict[model]
+        X = [x_labels.index(feat) for feat, cmi in important_feats]
+        Y = [cmi for feat, cmi in important_feats]
+        Y = list(map(lambda x: 0 if x < 0 else x, Y))
+        ax.plot(X, Y, label=model, linestyle='solid')
+        ax.scatter(X[0], Y[0], marker='*')
+        ax.scatter(X[1], Y[1], marker='o')
+        ax.scatter(X[2], Y[2], marker='v')
+
+    x_ticks_labels = [
+        t.replace('deep_f_sim', 'deep_sim') for t in x_labels
+    ]
+    return x_ticks_labels
+
+
+def visualize_all_mut_info(pkl_file='all_mut_info.pkl'):
     with open(pkl_file, 'rb') as fh:
         all_mut_info = pickle.load(fh)
 
     fields, mi_dict = all_mut_info
 
-    under_performs = 'FFM,FmFM,CCPM,FiBiNET,DeepFM,FM'.split(',')
-    over_performs = 'FFMv2,DCNv2,FwFM,WideDeep,FiGNN,ONNv2,PNN,AutoInt,DCN,FNN,DeepCrossing,InterHAt,DNN,DeepIM'.split(',')
+    under_performs = 'FGCNN,FFMv2,AFM,AFN,InterHAt,CCPM,FM,FFM'.split(',')
+    over_performs = 'DCNv2,FwFM,WideDeep,FiGNN,PNN,DeepFM,AutoInt,DCN,NFM,xDeepFM,FNN,DeepCrossing,ONN,DNN,DeepIM'.split(',')
 
     fig, axs = plt.subplots(2)
-    #fig.subplots_adjust(hspace=0.75)
+    fig.subplots_adjust(hspace=0.25)
 
-    for model in mi_dict:
-        mi = mi_dict[model]
-        assert len(mi) == len(fields)
-        if model in under_performs:
-            axs[0].plot(mi, label=model)
-        elif model in over_performs:
-            axs[1].plot(mi, label=model)
-        else:
-            print('skip neutral model:', model)
-            continue
+    x_ticks_labels_0 = plot_subgraph(axs[0], mi_dict, over_performs)
+    x_ticks_labels_1 = plot_subgraph(axs[1], mi_dict, under_performs)
 
-    fields = ['NULL'] + fields
-    axs[1].set_xticklabels(fields, rotation=70)
-    axs[0].legend(loc='upper right')
+    axs[0].legend(bbox_to_anchor=(1.0,1), loc="upper left")
+    axs[0].set_xticks([i for i, _ in enumerate(x_ticks_labels_0)])
+    axs[0].set_xticklabels(x_ticks_labels_0, rotation=0)
+
     axs[1].legend(loc='upper right')
+    axs[1].set_xticks([i for i, _ in enumerate(x_ticks_labels_1)])
+    axs[1].set_xticklabels(x_ticks_labels_1, rotation=0)
+
     plt.show()
 
 
@@ -140,5 +182,5 @@ if __name__ == "__main__":
     fire.Fire({
         "mut_info_analysis": mut_info_analysis,
         "get_all_mut_info": get_all_mut_info,
-        "plot_models": plot_models
+        "visualize_all_mut_info": visualize_all_mut_info
     })
