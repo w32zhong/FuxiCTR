@@ -73,14 +73,17 @@ def mut_info_analysis(csv_file, n_rows=40_000, top_k_feat=3):
 
     Y = df['y_pred'].to_numpy().reshape(-1, 1)
     Z_set = []
+    feat_set = fields.copy()
     for k in range(top_k_feat):
         field_cmi = []
-        for field in fields:
+        for field in feat_set:
             X = df[field].to_numpy().reshape(-1, 1)
             Z = np.asarray(Z_set).T
             cmi = cond_mutual_info(Y, X, Z)
             field_cmi.append(cmi)
-        max_field = fields[np.asarray(field_cmi).argmax()]
+        max_field_idx = np.asarray(field_cmi).argmax()
+        max_field = feat_set[max_field_idx]
+        del feat_set[max_field_idx]
         max_cmi = max(field_cmi)
         print(f'top-{k} max field:', max_field, '=', max_cmi)
         Z_set.append(df[max_field].to_numpy())
