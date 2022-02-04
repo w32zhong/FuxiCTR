@@ -16,7 +16,7 @@ warnings.filterwarnings('error')
 fields = 'a0_sym,a0_stct,a0_score,token_sim,deep_f_sim,deep_tag_sim,f_len_q,f_len_d'
 fields = fields.split(',')
 
-field_priority = 'deep_f_sim,deep_tag_sim,token_sim,a0_score,a0_sym,a0_stct,f_len_q,f_len_d'
+field_priority = 'deep_f_sim,deep_tag_sim,token_sim,a0_sym,a0_score,a0_stct,f_len_q,f_len_d'
 field_priority = field_priority.split(',')
 
 # Reference: https://github.com/gregversteeg/NPEET/blob/master/npeet/entropy_estimators.py
@@ -166,11 +166,11 @@ def visualize_all_mut_info(pkl_file='all_mut_info.pkl'):
     x_ticks_labels_0 = plot_subgraph(axs[0], mi_dict, over_performs)
     x_ticks_labels_1 = plot_subgraph(axs[1], mi_dict, under_performs)
 
-    axs[0].legend(bbox_to_anchor=(1.0,1), loc="upper left")
+    axs[0].legend(loc="upper right", framealpha=0)
     axs[0].set_xticks([i for i, _ in enumerate(x_ticks_labels_0)])
     axs[0].set_xticklabels(x_ticks_labels_0, rotation=0)
 
-    axs[1].legend(loc='upper right')
+    axs[1].legend(loc='upper right', framealpha=0)
     axs[1].set_xticks([i for i, _ in enumerate(x_ticks_labels_1)])
     axs[1].set_xticklabels(x_ticks_labels_1, rotation=0)
 
