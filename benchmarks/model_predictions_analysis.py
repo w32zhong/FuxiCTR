@@ -157,7 +157,7 @@ def visualize_all_mut_info(pkl_file='all_mut_info.pkl'):
 
     fields, mi_dict = all_mut_info
 
-    under_performs = 'FGCNN,FFMv2,AFM,AFN,InterHAt,CCPM,FM,FFM'.split(',')
+    under_performs = 'FGCNN,FFMv2,AFM,AFN,InterHAt,FM,FFM'.split(',')
     over_performs = 'DCNv2,FwFM,WideDeep,FiGNN,PNN,DeepFM,AutoInt,DCN,NFM,xDeepFM,FNN,DeepCrossing,ONN,DNN,DeepIM'.split(',')
 
     fig, axs = plt.subplots(2)
