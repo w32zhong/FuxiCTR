@@ -119,13 +119,13 @@ def get_all_mut_info(root_dir):
         pickle.dump(results, fh)
 
 
-def plot_subgraph(ax, mi_dict, filter_set):
+def plot_subgraph(ax, mi_dict, over_performs, under_performs):
     selected_models = list()
     x_labels = set()
     for model in mi_dict:
         important_feats = mi_dict[model]
         Y = [cmi for feat, cmi in important_feats]
-        if model not in filter_set:
+        if model not in over_performs + under_performs:
             continue
         elif max(Y) > 500:
             continue
@@ -140,7 +140,10 @@ def plot_subgraph(ax, mi_dict, filter_set):
         X = [x_labels.index(feat) for feat, cmi in important_feats]
         Y = [cmi for feat, cmi in important_feats]
         Y = list(map(lambda x: 0 if x < 0 else x, Y))
-        ax.plot(X, Y, label=model, linestyle='solid')
+        if model in under_performs:
+            ax.plot(X, Y, label=model, linestyle=':')
+        else:
+            ax.plot(X, Y, label=model, linestyle='solid')
         ax.scatter(X[0], Y[0], marker='*')
         ax.scatter(X[1], Y[1], marker='o')
         ax.scatter(X[2], Y[2], marker='v')
@@ -160,19 +163,14 @@ def visualize_all_mut_info(pkl_file='all_mut_info.pkl'):
     under_performs = 'FGCNN,FFMv2,AFM,AFN,InterHAt,FM,FFM'.split(',')
     over_performs = 'DCNv2,FwFM,WideDeep,FiGNN,PNN,DeepFM,AutoInt,DCN,NFM,xDeepFM,FNN,DeepCrossing,ONN,DNN,DeepIM'.split(',')
 
-    fig, axs = plt.subplots(2)
+    fig, axs = plt.subplots(1)
     fig.subplots_adjust(hspace=0.25)
 
-    x_ticks_labels_0 = plot_subgraph(axs[0], mi_dict, over_performs)
-    x_ticks_labels_1 = plot_subgraph(axs[1], mi_dict, under_performs)
+    x_ticks_labels_0 = plot_subgraph(axs, mi_dict, over_performs,under_performs)
 
-    axs[0].legend(loc="upper right", framealpha=0)
-    axs[0].set_xticks([i for i, _ in enumerate(x_ticks_labels_0)])
-    axs[0].set_xticklabels(x_ticks_labels_0, rotation=0)
-
-    axs[1].legend(loc='upper right', framealpha=0)
-    axs[1].set_xticks([i for i, _ in enumerate(x_ticks_labels_1)])
-    axs[1].set_xticklabels(x_ticks_labels_1, rotation=0)
+    axs.legend(loc="upper right", framealpha=0)
+    axs.set_xticks([i for i, _ in enumerate(x_ticks_labels_0)])
+    axs.set_xticklabels(x_ticks_labels_0, rotation=0)
 
     plt.show()
 
