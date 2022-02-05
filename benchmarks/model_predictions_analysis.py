@@ -172,6 +172,7 @@ def visualize_all_mut_info(pkl_file='all_mut_info.pkl'):
     axs.set_xticks([i for i, _ in enumerate(x_ticks_labels_0)])
     axs.set_xticklabels(x_ticks_labels_0, rotation=0)
 
+    plt.tight_layout()
     plt.show()
 
 
