@@ -172,8 +172,8 @@ def visualize_all_mut_info(pkl_file='all_mut_info.pkl'):
     axs.set_xticks([i for i, _ in enumerate(x_ticks_labels_0)])
     axs.set_xticklabels(x_ticks_labels_0, rotation=0)
 
-    plt.xlabel('Top features')
-    plt.ylabel('Cond. mutual information')
+    plt.xlabel('Top features', fontsize=13)
+    plt.ylabel('Cond. mutual information', fontsize=13)
 
     plt.tight_layout()
     plt.show()
